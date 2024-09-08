@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Function to get population data of a country
+get_population() {
+    country="$1"
+    response=$(curl -s "https://restcountries.com/v3.1/name/$country")
+    
+    # Check if the country exists
+    if echo "$response" | grep -q '"population"'; then
+        population=$(echo "$response" | grep -o '"population":[0-9]*' | head -1 | cut -d':' -f2)
+        echo "Population of $country: $population"
+    else
+        echo "Country not found or data not available."
+    fi
+}
+
+# Ask the user to enter the country name
+read -p "Enter the country name: " country_name
+
+# Get and display the population
+get_population "$country_name"
